@@ -4,7 +4,12 @@ on:
   workflow_call:
 
 jobs:
+  codeql:
+    name: CodeQL Analysis
+    uses: ./.github/workflows/.codeql.yml
+
   test:
+    name: Run Vitest
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
