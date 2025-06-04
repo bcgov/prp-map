@@ -24,5 +24,5 @@
       "@styles/*": ["src/styles/*"],
     }
   },
-  "include": ["src", "./index.ts", "./vite-env.d.ts"],
+  "include": ["example", "src", "./index.ts", "./vite-env.d.ts"],
 }
