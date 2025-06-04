@@ -1,18 +1,33 @@
 {
-  "name": "prp-map",
+  "name": "@bcgov-prp/map",
   "description": "A React component for displaying a map",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
+  "main": "dist/index.umd.js",
+  "module": "dist/index.es.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bcgov/prp-map.git"
+  },
+  "keywords": [
+    "react",
+    "map",
+    "component",
+    "openlayers"
+  ],
+  "types": "dist/index.d.ts",
   "scripts": {
     "dev": "vite --config example/vite.config.ts",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest --mode test",
-    "test:cov": "vitest run --mode test --coverage"
+    "test:cov": "vitest run --mode test --coverage",
+    "publish": "npm run build && npm publish --access public"
   },
   "sideEffects": [
-    "@bcgov/bc-sans/css/BC_Sans.css"
+    "@bcgov/bc-sans/css/BC_Sans.css",
+    "*.scss"
   ],
   "files": [
     "/dist"
@@ -22,8 +37,12 @@
   },
   "dependencies": {
     "@bcgov/bc-sans": "^2.1.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "@digitalspace/bcparks-bootstrap-theme": "^1.4.6",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "ol": "^10.5.0",
+    "ol-mapbox-style": "^12.5.0",
+    "react-bootstrap": "^2.10.10"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
@@ -35,15 +54,25 @@
     "@vitejs/plugin-react": "^4.4.1",
     "@vitest/coverage-v8": "^3.1.4",
     "eslint": "^9.25.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-prettier": "^5.4.1",
+    "eslint-plugin-promise": "^7.2.1",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^16.0.0",
     "jsdom": "^26.1.0",
+    "sass-embedded": "^1.89.0",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1",
     "vite": "^6.3.5",
+    "vite-plugin-css-injected-by-js": "^3.5.2",
     "vite-plugin-dts": "^4.5.4",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.1.4"
+    "vitest": "^3.2.0"
+  },
+  "peerDependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   }
 }

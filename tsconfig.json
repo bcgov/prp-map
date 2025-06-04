@@ -15,14 +15,14 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "typeRoots": ["./dist/index.d.ts", "node_modules/@types"],
+    "typeRoots": ["node_modules/@types"],
     "types": ["vite/client", "vitest/globals", "node"],
     "baseUrl": "./",
     "paths": {
       "@": ["src"],
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@styles/*": ["src/styles/*"],
     }
   },
-  "include": ["src", "./index.ts"],
-
+  "include": ["src", "./index.ts", "./vite-env.d.ts"],
 }

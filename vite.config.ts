@@ -1,11 +1,12 @@
 import { defineConfig } from "vite";
 import path, { resolve } from "path";
 import react from "@vitejs/plugin-react";
+import cssInjectedByJsPlugin from "vite-plugin-css-injected-by-js";
 import dts from "vite-plugin-dts";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), dts()],
+  plugins: [react(), dts(), cssInjectedByJsPlugin()],
   build: {
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),

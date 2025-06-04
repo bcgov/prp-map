@@ -1,2 +1,2 @@
-import "@bcgov/bc-sans/css/BC_Sans.css";
-export { default as TestComponent } from "@/components/Test";
+export { default as MapControls } from "@/components/MapControls/MapControls";
+export { default as VectorFeatureMap } from "@/components/VectorFeatureMap/VectorFeatureMap";

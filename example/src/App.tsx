@@ -1,13 +1,13 @@
 import React from "react";
-import TestComponent from "../../src/components/Test";
+import { VectorFeatureMap } from "../../src/index";
 
 const App = () => {
   return (
     <div>
-      <h1>Component Library Playground</h1>
-      <TestComponent />
+      <h1>PRP Maps</h1>
+      <VectorFeatureMap style={{ width: "100%", height: "500px" }} />
     </div>
   );
 };
 
-export { App };
+export default App;
