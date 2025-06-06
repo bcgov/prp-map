@@ -25,6 +25,8 @@ interface VectorFeatureMapProps {
   layers: VectorLayerConfig[];
   /** Child components to render within the map context */
   children?: ReactNode;
+  /** Enables or disables tracking with matomo */
+  enableTracking?: boolean;
 }
 
 /**
@@ -33,6 +35,7 @@ interface VectorFeatureMapProps {
  */
 
 const VectorFeatureMap: React.FC<VectorFeatureMapProps> = ({
+  enableTracking = false,
   style,
   layers,
   children,
@@ -73,7 +76,7 @@ const VectorFeatureMap: React.FC<VectorFeatureMapProps> = ({
     }
   }, [map]);
 
-  useOpenLayersTracking(map);
+  useOpenLayersTracking(map, enableTracking);
 
   return (
     <div

@@ -26,5 +26,5 @@
       "@styles/*": ["src/styles/*"],
     }
   },
-  "include": ["src", "./index.ts", "./vite-env.d.ts", "eslint.config.mjs"],
+  "include": ["src", "src/**/*", "./index.ts", "./vite-env.d.ts", "eslint.config.mjs"],
 }

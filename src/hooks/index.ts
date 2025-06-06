@@ -1,5 +1,5 @@
-export { useAddVectorLayersToMap } from "@/hooks/useAddVectorLayersToMap";
-export { useGetMapStyles } from "@/hooks/useGetMapStyles";
-export { useMapBaseLayers } from "@/hooks/useMapBaseLayers";
-export { useMapInitialization } from "@/hooks/useMapInitialization";
-export { useOpenLayersTracking } from "@/hooks/useOpenLayersTracking";
+export { useAddVectorLayersToMap } from "./useAddVectorLayersToMap";
+export { useGetMapStyles } from "./useGetMapStyles";
+export { useMapBaseLayers } from "./useMapBaseLayers";
+export { useMapInitialization } from "./useMapInitialization";
+export { useOpenLayersTracking } from "./useOpenLayersTracking";
