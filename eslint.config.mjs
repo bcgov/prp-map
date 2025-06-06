@@ -131,4 +131,13 @@ export default [
       ],
     },
   },
+  {
+    files: ["example/**/*.ts", "example/**/*.tsx"],
+    languageOptions: {
+      parserOptions: {
+        project: ["./example/tsconfig.json"],
+        tsconfigRootDir: __dirname,
+      },
+    },
+  },
 ];

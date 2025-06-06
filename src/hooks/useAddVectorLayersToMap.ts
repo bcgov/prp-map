@@ -6,16 +6,9 @@ import { Layer } from "ol/layer";
 import { VectorLayerConfig } from "@/types";
 
 interface UseMultipleVectorLayersProps {
-  /** OpenLayers map instance */
   map: OlMap;
-  /** Array of vector layer configurations */
   layers: VectorLayerConfig[];
 }
-
-/**
- * Hook to manage multiple vector layers on an OpenLayers map.
- * Efficiently adds, updates, or removes layers with minimal re-renders.
- */
 
 export const useAddVectorLayersToMap = ({
   map,
@@ -36,30 +29,46 @@ export const useAddVectorLayersToMap = ({
       }
     });
 
-    // Add new or replace existing
-    layers.forEach(({ id, features, layerInstance, visible = true }) => {
-      const existing = addedLayers.current.get(id);
-      if (existing) {
-        existing.setVisible(visible);
-        return;
-      }
+    // Add or update layers
+    layers.forEach(
+      ({ id, features, layerInstance, visible = true, onLayerAdded }) => {
+        const existing = addedLayers.current.get(id);
+        if (existing) {
+          existing.setVisible(visible);
+          return;
+        }
 
-      let layer: Layer | null = null;
+        let layer: Layer | null = null;
 
-      if (layerInstance) {
-        layer = layerInstance;
-      } else if (features?.length) {
-        layer = new VectorLayer({
-          source: new VectorSource({ features }),
-        });
-      }
+        if (layerInstance) {
+          layer = layerInstance;
 
-      if (layer) {
-        layer.set("id", id);
-        layer.setVisible(visible);
-        map.addLayer(layer);
-        addedLayers.current.set(id, layer);
-      }
-    });
+          const source = (layer as any).getSource?.();
+          if (source && onLayerAdded) {
+            map.once("rendercomplete", () => {
+              const extent = source.getExtent();
+              onLayerAdded(extent);
+            });
+          }
+        } else if (features?.length) {
+          const source = new VectorSource({ features });
+          layer = new VectorLayer({ source });
+
+          if (onLayerAdded) {
+            map.once("rendercomplete", () => {
+              const extent = source.getExtent();
+              onLayerAdded(extent);
+            });
+          }
+        }
+
+        if (layer) {
+          layer.set("id", id);
+          layer.setVisible(visible);
+          map.addLayer(layer);
+          addedLayers.current.set(id, layer);
+        }
+      },
+    );
   }, [map, layers]);
 };
