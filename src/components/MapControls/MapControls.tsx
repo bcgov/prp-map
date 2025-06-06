@@ -25,65 +25,67 @@ interface MapControlsProps {
  * @param {OlMap} props.map - OpenLayers Map instance to control
  * @param {Coordinate} [props.extent] - Optional coordinate extent to center the map on
  */
-const MapControls: FC<MapControlsProps> = memo(
-  ({ map, extent, defaultZoom = DEFAULT_MAP_ZOOM }) => {
-    const view = map.getView();
+const MapControls: FC<MapControlsProps> = ({
+  map,
+  extent,
+  defaultZoom = DEFAULT_MAP_ZOOM,
+}) => {
+  const view = map.getView();
 
-    const onZoomIn = useCallback(
-      (e: React.MouseEvent) => {
-        e.stopPropagation();
-        const zoom = view.getZoom() ?? 0;
-        view.animate({ zoom: zoom + 1, duration: 250 });
-      },
-      [view],
-    );
+  const onZoomIn = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      const zoom = view.getZoom() ?? 0;
+      view.animate({ zoom: zoom + 1, duration: 250 });
+    },
+    [view],
+  );
 
-    const onZoomOut = useCallback(
-      (e: React.MouseEvent) => {
-        e.stopPropagation();
-        const zoom = view.getZoom() ?? 0;
-        view.animate({ zoom: zoom - 1, duration: 250 });
-      },
-      [view],
-    );
+  const onZoomOut = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      const zoom = view.getZoom() ?? 0;
+      view.animate({ zoom: zoom - 1, duration: 250 });
+    },
+    [view],
+  );
 
-    const onCenter = useCallback(
-      (e: React.MouseEvent) => {
-        e.stopPropagation();
-        view.fit(extent ?? view.getProjection().getExtent());
-        view.setZoom(defaultZoom);
-      },
-      [view, extent, defaultZoom],
-    );
+  const onCenter = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      view.fit(extent ?? view.getProjection().getExtent());
+      view.setZoom(defaultZoom);
+    },
+    [view, extent, defaultZoom],
+  );
 
-    return (
-      <ButtonGroup vertical className="zoom-control">
-        <Button
-          variant="light"
-          onClick={onCenter}
-          aria-label="Center map to full extent"
-        >
-          <FontAwesomeIcon icon={faLocationCrosshairs} />
-        </Button>
-        <Button
-          variant="light"
-          onClick={onZoomIn}
-          className="zoom-in-btn"
-          aria-label="Zoom in"
-        >
-          <FontAwesomeIcon icon={faPlus} />
-        </Button>
-        <Button
-          variant="light"
-          onClick={onZoomOut}
-          className="zoom-out-btn"
-          aria-label="Zoom out"
-        >
-          <FontAwesomeIcon icon={faMinus} />
-        </Button>
-      </ButtonGroup>
-    );
-  },
-);
+  return (
+    <ButtonGroup vertical className="zoom-control">
+      <Button
+        variant="light"
+        onClick={onCenter}
+        aria-label="Center map to full extent"
+      >
+        <FontAwesomeIcon icon={faLocationCrosshairs} />
+      </Button>
+      <Button
+        variant="light"
+        onClick={onZoomIn}
+        className="zoom-in-btn"
+        aria-label="Zoom in"
+      >
+        <FontAwesomeIcon icon={faPlus} />
+      </Button>
+      <Button
+        variant="light"
+        onClick={onZoomOut}
+        className="zoom-out-btn"
+        aria-label="Zoom out"
+      >
+        <FontAwesomeIcon icon={faMinus} />
+      </Button>
+    </ButtonGroup>
+  );
+};
 
-export default MapControls;
+export default memo(MapControls);

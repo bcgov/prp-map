@@ -51,6 +51,7 @@ export default [
           jsx: true,
         },
         project: ["./tsconfig.json"],
+        tsconfigRootDir: __dirname,
       },
     },
 
