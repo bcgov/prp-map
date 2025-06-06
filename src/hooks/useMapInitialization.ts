@@ -2,6 +2,9 @@ import { useMemo } from "react";
 import OlMap from "ol/Map";
 import OlView from "ol/View";
 import BaseLayer from "ol/layer/Base";
+import { defaults as defaultInteractions } from "ol/interaction";
+import MouseWheelZoom from "ol/interaction/MouseWheelZoom";
+import PinchZoom from "ol/interaction/PinchZoom";
 import { MAP_CENTER_COORDINATES, MAP_EXTENT_COORDINATES } from "@/constants";
 
 /**
@@ -11,17 +14,28 @@ import { MAP_CENTER_COORDINATES, MAP_EXTENT_COORDINATES } from "@/constants";
  */
 export const useMapInitialization = (layers: BaseLayer[]) => {
   return useMemo(() => {
+    const view = new OlView({
+      center: MAP_CENTER_COORDINATES,
+      zoom: 15,
+      enableRotation: false,
+      extent: MAP_EXTENT_COORDINATES,
+      minZoom: 6,
+      maxZoom: 30,
+    });
+
+    const interactions = defaultInteractions({
+      mouseWheelZoom: false,
+      pinchZoom: false,
+    }).extend([
+      new MouseWheelZoom({ duration: 300 }),
+      new PinchZoom({ duration: 300 }),
+    ]);
+
     return new OlMap({
       controls: [],
-      view: new OlView({
-        center: MAP_CENTER_COORDINATES,
-        constrainResolution: true,
-        zoom: 15,
-        enableRotation: false,
-        extent: MAP_EXTENT_COORDINATES,
-        maxZoom: 30,
-      }),
-      layers: layers,
+      layers,
+      view,
+      interactions,
     });
   }, [layers]);
 };

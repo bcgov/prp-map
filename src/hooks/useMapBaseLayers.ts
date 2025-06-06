@@ -6,12 +6,22 @@ import { applyStyle } from "ol-mapbox-style";
 import { useGetMapStyles } from "@/hooks";
 import { MAP_URLS } from "@/constants";
 
-// Create base layers with vector tile source
+// Create base layers with vector tile source and tuned settings
 const baseLayers = [
   new VectorTileLayer({
+    declutter: true,
+    renderMode: "hybrid",
+    renderBuffer: 100,
+    updateWhileAnimating: true,
+    // Preload controls how many zoom levels beyond the current zoom level OpenLayers will
+    // load tiles for in advance at the cost of memory and cpu. Reduces white tiles while panning/zoom
+    preload: 2,
+    updateWhileInteracting: true,
     source: new VectorTileSource({
       format: new MVT(),
       url: MAP_URLS.baseLayer,
+      wrapX: true,
+      cacheSize: 1024,
     }),
   }),
 ];
@@ -23,7 +33,6 @@ const baseLayers = [
 export const useMapBaseLayers = () => {
   const { data: glStyles } = useGetMapStyles();
 
-  // Apply mapbox styles to base layers when styles are loaded
   useEffect(() => {
     if (glStyles) {
       baseLayers.forEach((baseLayer) => {

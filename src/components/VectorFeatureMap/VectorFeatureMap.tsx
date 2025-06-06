@@ -1,66 +1,70 @@
-import { ReactNode, useCallback, useEffect, useState } from "react";
-import { Feature } from "ol";
-import { StyleLike } from "ol/style/Style";
 import {
-  useAddVectorLayerToMap,
+  memo,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { Coordinate } from "ol/coordinate";
+import {
+  useAddVectorLayersToMap,
   useMapBaseLayers,
   useMapInitialization,
   useOpenLayersTracking,
 } from "@/hooks";
-import { Coordinate } from "ol/coordinate";
-import { MapControls } from "@";
+import MapControls from "@/components/MapControls/MapControls";
 import { DEFAULT_MAP_ZOOM } from "@/constants";
-import "@/components/VectorFeatureMap/VectorFeatureMap.scss";
+import { VectorLayerConfig } from "@/types";
 
-interface StyledVectorFeatureMapProps {
-  /** Child components to render within the map context */
-  children?: ReactNode;
-  /** Enable matomo tracking for map interactions */
-  enableMatomoTracking?: boolean;
-  /** Array of OpenLayers features to display on the map as vector layers */
-  features: Feature[];
-  /** Style configuration for the vector features */
-  layerStyle: StyleLike;
+interface VectorFeatureMapProps {
   /** Optional CSS styles to apply to the map container */
   style?: React.CSSProperties;
+  /** Array of vector layer configurations to display on the map */
+  layers: VectorLayerConfig[];
+  /** Child components to render within the map context */
+  children?: ReactNode;
 }
 
 /**
  * A map component that displays vector features with custom styling
  * Uses OpenLayers library for map rendering and management
  */
-const VectorFeatureMap: React.FC<StyledVectorFeatureMapProps> = ({
-  children,
-  enableMatomoTracking = false,
-  features,
-  layerStyle,
+
+const VectorFeatureMap: React.FC<VectorFeatureMapProps> = ({
   style,
+  layers,
+  children,
 }) => {
-  const [featureExtent, setFeatureExtent] = useState<Coordinate>();
+  const [featureExtent, setFeatureExtent] = useState<Coordinate | null>(null);
   const baseLayers = useMapBaseLayers();
   const map = useMapInitialization(baseLayers);
 
-  // centers the map on the given extent
+  // Track if map has already been fit to extent once
+  const hasFittedRef = useRef(false);
+
   const handleCallback = useCallback(
     (extent: Coordinate) => {
-      const view = map.getView();
-      view.fit(extent);
-      view.setZoom(DEFAULT_MAP_ZOOM);
-      setFeatureExtent(extent);
+      if (!hasFittedRef.current) {
+        const view = map.getView();
+        view.fit(extent);
+        view.setZoom(DEFAULT_MAP_ZOOM);
+        setFeatureExtent(extent);
+        hasFittedRef.current = true;
+      }
     },
     [map],
   );
 
-  // add the given features are vector layers
-  useAddVectorLayerToMap({
-    map,
-    features,
-    layerStyle,
-    onLayerAdded: handleCallback,
-  });
+  const memoizedLayers = useMemo(() => {
+    return layers?.map((layer) => ({
+      ...layer,
+      onLayerAdded: handleCallback,
+    }));
+  }, [layers, handleCallback]);
 
-  // track map interactions
-  useOpenLayersTracking(map, enableMatomoTracking);
+  useAddVectorLayersToMap({ map, layers: memoizedLayers });
 
   useEffect(() => {
     const targetElement = document.getElementById("map-container");
@@ -69,22 +73,19 @@ const VectorFeatureMap: React.FC<StyledVectorFeatureMapProps> = ({
     }
   }, [map]);
 
+  useOpenLayersTracking(map);
+
   return (
     <div
       id="map-container"
-      className="map-container"
       data-testid="map-container"
-      style={{
-        width: "500px",
-        height: "500px",
-        ...style,
-      }}
+      style={style}
       aria-label="styled-vector-feature-map"
     >
       {children}
-      <MapControls map={map} extent={featureExtent} />
+      <MapControls map={map} extent={featureExtent ?? undefined} />
     </div>
   );
 };
 
-export default VectorFeatureMap;
+export default memo(VectorFeatureMap);
