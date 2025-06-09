@@ -1,5 +1,3 @@
-// TODO: Use tanstack query in this repo?
-// Refactored this hook to use fetch and state instead of tanstack to avoid unnecessary dependencies.
 import { useEffect, useState } from "react";
 import { MAP_URLS } from "@/constants";
 

@@ -1,5 +1,4 @@
 import {
-  memo,
   ReactNode,
   useCallback,
   useEffect,
@@ -96,4 +95,4 @@ const VectorFeatureMap: React.FC<VectorFeatureMapProps> = ({
   );
 };
 
-export default memo(VectorFeatureMap);
+export default VectorFeatureMap;

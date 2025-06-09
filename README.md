@@ -17,7 +17,7 @@
 
 ## Publishing
 
-1. Ensure you are a maintainer in the `bcgov-prp` NPM organization
+1. Ensure you are a maintainer in the `@bcgov` NPM organization
 2. Update the version in `package.json`
 3. Run `npm login` to log in to your NPM account
 4. Run `npm run publish` which will:

@@ -1,7 +1,7 @@
 {
-  "name": "prp-map",
+  "name": "@bcgov/prp-map",
   "description": "A React component for displaying a map",
-  "version": "0.0.12",
+  "version": "0.0.2",
   "type": "module",
   "main": "dist/index.umd.js",
   "module": "dist/index.es.js",
@@ -13,14 +13,6 @@
     ".": {
       "import": "./dist/index.es.js",
       "require": "./dist/index.umd.js"
-    },
-    "./hooks": {
-      "import": "./dist/hooks.es.js",
-      "require": "./dist/hooks.cjs.js"
-    },
-    "./layers": {
-      "import": "./dist/layers.es.js",
-      "require": "./dist/layers.cjs.js"
     }
   },
   "keywords": [
