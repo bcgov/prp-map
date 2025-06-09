@@ -85,13 +85,21 @@ export const createRecreationFeatureSource = (
 
 export const createRecreationFeatureLayer = (
   source: VectorSource,
-  maxTextResolution: number = MAP_LAYER.MAX_TEXT_RESOLUTION,
+  options?: {
+    declutter?: boolean;
+    maxTextResolution: number;
+    updateWhileInteracting?: boolean;
+    updateWhileAnimating?: boolean;
+    renderBuffer?: number;
+  },
 ) =>
   new VectorLayer({
     source,
-    style: createRecreationFeatureStyle(maxTextResolution),
-    declutter: true,
-    updateWhileInteracting: true,
-    updateWhileAnimating: true,
-    renderBuffer: 300,
+    style: createRecreationFeatureStyle(
+      options?.maxTextResolution ?? MAP_LAYER.MAX_TEXT_RESOLUTION,
+    ),
+    declutter: options?.declutter ?? true,
+    updateWhileInteracting: options?.updateWhileInteracting ?? true,
+    updateWhileAnimating: options?.updateWhileAnimating ?? true,
+    renderBuffer: options?.renderBuffer ?? 300,
   });

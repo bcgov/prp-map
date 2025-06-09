@@ -20,7 +20,10 @@ const ExampleMap = ({ style }: SearchableMapProps) => {
   );
 
   const featureLayer = useMemo(
-    () => createRecreationFeatureLayer(featureSource, MAX_TEXT_RESOLUTION),
+    () =>
+      createRecreationFeatureLayer(featureSource, {
+        maxTextResolution: MAX_TEXT_RESOLUTION,
+      }),
     [featureSource],
   );
 
