@@ -30,7 +30,7 @@ const ExampleMap = ({ style }: SearchableMapProps) => {
     [featureLayer],
   );
 
-  return <VectorFeatureMap style={style} layers={layers} />;
+  return <VectorFeatureMap style={style} layers={layers} defaultZoom={10} />;
 };
 
 export default ExampleMap;

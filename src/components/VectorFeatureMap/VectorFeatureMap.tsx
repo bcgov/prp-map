@@ -8,12 +8,10 @@ import {
   useState,
 } from "react";
 import { Coordinate } from "ol/coordinate";
-import {
-  useAddVectorLayersToMap,
-  useMapBaseLayers,
-  useMapInitialization,
-  useOpenLayersTracking,
-} from "@/hooks";
+import { useAddVectorLayersToMap } from "@/hooks/useAddVectorLayersToMap";
+import { useMapBaseLayers } from "@/hooks/useMapBaseLayers";
+import { useOpenLayersTracking } from "@/hooks/useOpenLayersTracking";
+import { useMapInitialization } from "@/hooks/useMapInitialization";
 import MapControls from "@/components/MapControls/MapControls";
 import { DEFAULT_MAP_ZOOM } from "@/constants";
 import { VectorLayerConfig } from "@/types";
@@ -27,6 +25,8 @@ interface VectorFeatureMapProps {
   children?: ReactNode;
   /** Enables or disables tracking with matomo */
   enableTracking?: boolean;
+  /** Optional initial zoom level for the map */
+  defaultZoom?: number;
 }
 
 /**
@@ -39,10 +39,11 @@ const VectorFeatureMap: React.FC<VectorFeatureMapProps> = ({
   style,
   layers,
   children,
+  defaultZoom = DEFAULT_MAP_ZOOM,
 }) => {
   const [featureExtent, setFeatureExtent] = useState<Coordinate | null>(null);
   const baseLayers = useMapBaseLayers();
-  const map = useMapInitialization(baseLayers);
+  const map = useMapInitialization(baseLayers, defaultZoom);
 
   // Track if map has already been fit to extent once
   const hasFittedRef = useRef(false);
@@ -52,7 +53,7 @@ const VectorFeatureMap: React.FC<VectorFeatureMapProps> = ({
       if (!hasFittedRef.current) {
         const view = map.getView();
         view.fit(extent);
-        view.setZoom(DEFAULT_MAP_ZOOM);
+        view.setZoom(defaultZoom);
         setFeatureExtent(extent);
         hasFittedRef.current = true;
       }
@@ -86,7 +87,11 @@ const VectorFeatureMap: React.FC<VectorFeatureMapProps> = ({
       aria-label="styled-vector-feature-map"
     >
       {children}
-      <MapControls map={map} extent={featureExtent ?? undefined} />
+      <MapControls
+        map={map}
+        extent={featureExtent ?? undefined}
+        defaultZoom={defaultZoom}
+      />
     </div>
   );
 };

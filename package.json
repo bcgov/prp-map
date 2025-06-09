@@ -1,7 +1,7 @@
 {
-  "name": "@bcgov/prp-map",
+  "name": "prp-map",
   "description": "A React component for displaying a map",
-  "version": "0.0.3",
+  "version": "0.0.12",
   "type": "module",
   "main": "dist/index.umd.js",
   "module": "dist/index.es.js",
@@ -15,12 +15,12 @@
       "require": "./dist/index.umd.js"
     },
     "./hooks": {
-      "import": "./dist/hooks/index.js",
-      "require": "./dist/hooks/index.js"
+      "import": "./dist/hooks.es.js",
+      "require": "./dist/hooks.cjs.js"
     },
     "./layers": {
-      "import": "./dist/layers/index.js",
-      "require": "./dist/layers/index.js"
+      "import": "./dist/layers.es.js",
+      "require": "./dist/layers.cjs.js"
     }
   },
   "keywords": [
@@ -32,7 +32,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "vite --config example/vite.config.ts",
-    "build": "tsc",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest --mode test",

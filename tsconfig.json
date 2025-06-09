@@ -15,6 +15,7 @@
     "noFallthroughCasesInSwitch": true,
     "declaration": true,
     "emitDeclarationOnly": false,
+    "esModuleInterop": true,
     "rootDir": "src",
     "outDir": "dist",
     "typeRoots": ["node_modules/@types"],
@@ -26,5 +27,5 @@
       "@styles/*": ["src/styles/*"],
     }
   },
-  "include": ["src", "src/**/*", "./index.ts", "./vite-env.d.ts", "eslint.config.mjs"],
+  "include": ["src", "src/**/*", "vite.config.ts", "./index.ts", "./vite-env.d.ts", "eslint.config.mjs"],
 }
