@@ -14,7 +14,7 @@ import { useMapBaseLayers } from "@/hooks/useMapBaseLayers";
 import { useOpenLayersTracking } from "@/hooks/useOpenLayersTracking";
 import { useMapInitialization } from "@/hooks/useMapInitialization";
 import MapControls from "@/components/MapControls/MapControls";
-import { DEFAULT_MAP_ZOOM } from "@/constants";
+import { DEFAULT_MAP_ZOOM, MAP_LAYER } from "@/constants";
 import { VectorLayerConfig } from "@/types";
 
 interface VectorFeatureMapProps {
@@ -28,6 +28,10 @@ interface VectorFeatureMapProps {
   enableTracking?: boolean;
   /** Optional initial zoom level for the map */
   defaultZoom?: number;
+  /** Optional minimum zoom level for the map */
+  minZoom?: number;
+  /** Optional maximum zoom level for the map */
+  maxZoom?: number;
 }
 
 /**
@@ -43,12 +47,18 @@ const VectorFeatureMap = forwardRef<any, VectorFeatureMapProps>(
       layers,
       children,
       defaultZoom = DEFAULT_MAP_ZOOM,
+      minZoom = MAP_LAYER.MIN_ZOOM_LEVEL,
+      maxZoom = MAP_LAYER.MAX_ZOOM_LEVEL,
     },
     ref,
   ) => {
     const [featureExtent, setFeatureExtent] = useState<Coordinate | null>(null);
     const baseLayers = useMapBaseLayers();
-    const map = useMapInitialization(baseLayers, defaultZoom);
+    const map = useMapInitialization(baseLayers, {
+      defaultZoom,
+      minZoom,
+      maxZoom,
+    });
 
     useImperativeHandle(ref, () => ({
       getMap: () => map,

@@ -18,16 +18,20 @@ import {
  */
 export const useMapInitialization = (
   layers: BaseLayer[],
-  defaultZoom?: number,
+  zoomSettings: {
+    defaultZoom?: number;
+    minZoom?: number;
+    maxZoom?: number;
+  } = {},
 ) => {
   return useMemo(() => {
     const view = new OlView({
       center: MAP_CENTER_COORDINATES,
-      zoom: defaultZoom ?? DEFAULT_MAP_ZOOM,
+      zoom: zoomSettings.defaultZoom ?? DEFAULT_MAP_ZOOM,
       enableRotation: false,
       extent: MAP_EXTENT_COORDINATES,
-      minZoom: 6,
-      maxZoom: 30,
+      minZoom: zoomSettings.minZoom ?? 6,
+      maxZoom: zoomSettings.maxZoom ?? 20,
     });
 
     const interactions = defaultInteractions({
