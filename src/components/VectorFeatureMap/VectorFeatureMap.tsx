@@ -1,7 +1,9 @@
 import {
+  forwardRef,
   ReactNode,
   useCallback,
   useEffect,
+  useImperativeHandle,
   useMemo,
   useRef,
   useState,
@@ -33,66 +35,75 @@ interface VectorFeatureMapProps {
  * Uses OpenLayers library for map rendering and management
  */
 
-const VectorFeatureMap: React.FC<VectorFeatureMapProps> = ({
-  enableTracking = false,
-  style,
-  layers,
-  children,
-  defaultZoom = DEFAULT_MAP_ZOOM,
-}) => {
-  const [featureExtent, setFeatureExtent] = useState<Coordinate | null>(null);
-  const baseLayers = useMapBaseLayers();
-  const map = useMapInitialization(baseLayers, defaultZoom);
-
-  // Track if map has already been fit to extent once
-  const hasFittedRef = useRef(false);
-
-  const handleCallback = useCallback(
-    (extent: Coordinate) => {
-      if (!hasFittedRef.current) {
-        const view = map.getView();
-        view.fit(extent);
-        view.setZoom(defaultZoom);
-        setFeatureExtent(extent);
-        hasFittedRef.current = true;
-      }
+const VectorFeatureMap = forwardRef<any, VectorFeatureMapProps>(
+  (
+    {
+      enableTracking = false,
+      style,
+      layers,
+      children,
+      defaultZoom = DEFAULT_MAP_ZOOM,
     },
-    [map],
-  );
+    ref,
+  ) => {
+    const [featureExtent, setFeatureExtent] = useState<Coordinate | null>(null);
+    const baseLayers = useMapBaseLayers();
+    const map = useMapInitialization(baseLayers, defaultZoom);
 
-  const memoizedLayers = useMemo(() => {
-    return layers?.map((layer) => ({
-      ...layer,
-      onLayerAdded: handleCallback,
+    useImperativeHandle(ref, () => ({
+      getMap: () => map,
     }));
-  }, [layers, handleCallback]);
 
-  useAddVectorLayersToMap({ map, layers: memoizedLayers });
+    // Track if map has already been fit to extent once
+    const hasFittedRef = useRef(false);
 
-  useEffect(() => {
-    const targetElement = document.getElementById("map-container");
-    if (targetElement) {
-      map.setTarget(targetElement);
-    }
-  }, [map]);
+    const handleCallback = useCallback(
+      (extent: Coordinate) => {
+        if (!hasFittedRef.current) {
+          const view = map.getView();
+          view.fit(extent);
+          view.setZoom(defaultZoom);
+          setFeatureExtent(extent);
+          hasFittedRef.current = true;
+        }
+      },
+      [map],
+    );
 
-  useOpenLayersTracking(map, enableTracking);
+    const memoizedLayers = useMemo(() => {
+      return layers?.map((layer) => ({
+        ...layer,
+        onLayerAdded: handleCallback,
+      }));
+    }, [layers, handleCallback]);
 
-  return (
-    <div
-      id="map-container"
-      data-testid="map-container"
-      style={style}
-      aria-label="styled-vector-feature-map"
-    >
-      {children}
-      <MapControls
-        map={map}
-        extent={featureExtent ?? undefined}
-        defaultZoom={defaultZoom}
-      />
-    </div>
-  );
-};
+    useAddVectorLayersToMap({ map, layers: memoizedLayers });
+
+    useEffect(() => {
+      const targetElement = document.getElementById("map-container");
+      if (targetElement) {
+        map.setTarget(targetElement);
+      }
+    }, [map]);
+
+    useOpenLayersTracking(map, enableTracking);
+
+    return (
+      <div
+        id="map-container"
+        data-testid="map-container"
+        style={style}
+        aria-label="styled-vector-feature-map"
+      >
+        {children}
+        <MapControls
+          map={map}
+          extent={featureExtent ?? undefined}
+          defaultZoom={defaultZoom}
+        />
+      </div>
+    );
+  },
+);
 
 export default VectorFeatureMap;
