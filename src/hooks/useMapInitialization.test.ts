@@ -24,7 +24,7 @@ describe("useMapInitialization", () => {
     expect(view.getCenter()).toEqual(MAP_CENTER_COORDINATES);
     expect(view.getZoom()).toBe(DEFAULT_MAP_ZOOM);
     expect(view.getMinZoom()).toBe(6);
-    expect(view.getMaxZoom()).toBe(30);
+    expect(view.getMaxZoom()).toBe(20);
     expect(view.getRotation()).toBe(0);
 
     expect(map.getLayers().getLength()).toBe(layers.length);
