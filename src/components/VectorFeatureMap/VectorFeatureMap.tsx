@@ -16,6 +16,7 @@ import { useMapInitialization } from "@/hooks/useMapInitialization";
 import MapControls from "@/components/MapControls/MapControls";
 import { DEFAULT_MAP_ZOOM, MAP_LAYER } from "@/constants";
 import { VectorLayerConfig } from "@/types";
+import "@/components/VectorFeatureMap/VectorFeatureMap.css";
 
 interface VectorFeatureMapProps {
   /** Optional CSS styles to apply to the map container */

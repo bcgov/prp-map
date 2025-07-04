@@ -4,6 +4,7 @@ import VectorLayer from "ol/layer/Vector";
 import OlMap from "ol/Map";
 import { Layer } from "ol/layer";
 import { VectorLayerConfig } from "@/types";
+import { isEmptyExtent } from "@/utils/isEmptyExtent";
 
 interface UseMultipleVectorLayersProps {
   map: OlMap;
@@ -47,6 +48,7 @@ export const useAddVectorLayersToMap = ({
           if (source && onLayerAdded) {
             map.once("rendercomplete", () => {
               const extent = source.getExtent();
+              if (isEmptyExtent(extent)) return;
               onLayerAdded(extent);
             });
           }
@@ -57,6 +59,7 @@ export const useAddVectorLayersToMap = ({
           if (onLayerAdded) {
             map.once("rendercomplete", () => {
               const extent = source.getExtent();
+              if (isEmptyExtent(extent)) return;
               onLayerAdded(extent);
             });
           }

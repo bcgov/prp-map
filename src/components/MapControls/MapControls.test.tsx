@@ -1,4 +1,3 @@
-import "./MapControls.scss";
 import OlMap from "ol/Map";
 import { Coordinate } from "ol/coordinate";
 import { MapControls } from "@";

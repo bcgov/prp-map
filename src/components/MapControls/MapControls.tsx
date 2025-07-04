@@ -9,7 +9,7 @@ import { FC, memo, useCallback } from "react";
 import OlMap from "ol/Map";
 import { Coordinate } from "ol/coordinate";
 import { DEFAULT_MAP_ZOOM } from "@/constants";
-import "@/components/MapControls/MapControls.scss";
+import "@/components/MapControls/MapControls.css";
 
 interface MapControlsProps {
   map: OlMap;
