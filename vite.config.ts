@@ -18,12 +18,10 @@ export default defineConfig({
       },
       formats: ["es", "cjs"],
     },
+    cssCodeSplit: false,
     rollupOptions: {
-      // Multiple inputs, each with its own entry point
       input: {
         index: path.resolve(__dirname, "src/index.ts"),
-        hooks: path.resolve(__dirname, "src/hooks/index.ts"),
-        layers: path.resolve(__dirname, "src/layers/index.ts"),
       },
       external: ["react", "react-dom"],
       output: {
@@ -32,7 +30,6 @@ export default defineConfig({
           "react-dom": "ReactDOM",
         },
         entryFileNames: "[name].[format].js",
-        inlineDynamicImports: false,
       },
     },
     sourcemap: true,
@@ -41,13 +38,6 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": resolve(__dirname, "src"),
-    },
-  },
-  css: {
-    preprocessorOptions: {
-      scss: {
-        api: "modern-compiler",
-      },
     },
   },
 });
