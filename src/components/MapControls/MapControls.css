@@ -2,18 +2,72 @@
   position: absolute;
   bottom: 20px;
   right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   z-index: 1000;
 }
 
-.zoom-control button {
-  width: 25px;
-  height: 25px;
-  font-size: 0.75rem;
-  box-shadow: 0 2px 4px rgba(0, 51, 102, 0.2);
+.zoom-btn-group {
+  display: flex;
+  flex-direction: column;
 }
 
-.btn-group,
-.btn-group-vertical {
-  position: absolute !important;
+/* Base button styles */
+.zoom-btn.btn-light {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1E5189;
+  border: 1px solid #1E5189;
+  border-radius: 6px;
+  padding: 8px;
+  height: 30px;
+  box-shadow: 0 2px 4px rgba(0, 51, 102, 0.2);
+  background-color: white;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.zoom-btn.zoom-btn--first,
+.zoom-btn.zoom-btn--first:hover,
+.zoom-btn.zoom-btn--first:focus {
+  border-bottom: none;
+}
+
+.zoom-btn--with-divider,
+.zoom-btn--with-divider:hover,
+.zoom-btn--with-divider:focus {
+  border-top: none;
+  position: relative;
+  z-index: 1;
+}
+
+.zoom-btn--with-divider::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 6px;
+  right: 6px;
+  height: 1px;
+  background-color: #1E5189;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.zoom-btn + .zoom-btn--with-divider {
+  border-top: none;
+}
+
+.zoom-btn-group > .zoom-btn:last-child {
+  border-bottom: 1px solid #1E5189;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+}
+
+.zoom-btn.btn-light:hover,
+.zoom-btn.btn-light:active {
+  background-color: #c7e3fd;
+  border-color: #1E5189;
+  color: #1E5189;
 }
 

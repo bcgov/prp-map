@@ -60,31 +60,35 @@ const MapControls: FC<MapControlsProps> = ({
   );
 
   return (
-    <ButtonGroup vertical className="zoom-control">
+    <div className="zoom-control">
       <Button
         variant="light"
+        className="zoom-btn mb-2"
         onClick={onCenter}
         aria-label="Center map to full extent"
       >
         <FontAwesomeIcon icon={faLocationCrosshairs} />
       </Button>
-      <Button
-        variant="light"
-        onClick={onZoomIn}
-        className="zoom-in-btn"
-        aria-label="Zoom in"
-      >
-        <FontAwesomeIcon icon={faPlus} />
-      </Button>
-      <Button
-        variant="light"
-        onClick={onZoomOut}
-        className="zoom-out-btn"
-        aria-label="Zoom out"
-      >
-        <FontAwesomeIcon icon={faMinus} />
-      </Button>
-    </ButtonGroup>
+
+      <ButtonGroup vertical className="zoom-btn-group">
+        <Button
+          variant="light"
+          onClick={onZoomIn}
+          className="zoom-btn zoom-btn--grouped zoom-btn--first"
+          aria-label="Zoom in"
+        >
+          <FontAwesomeIcon icon={faPlus} />
+        </Button>
+        <Button
+          variant="light"
+          onClick={onZoomOut}
+          className="zoom-btn zoom-btn--grouped zoom-btn--with-divider"
+          aria-label="Zoom out"
+        >
+          <FontAwesomeIcon icon={faMinus} />
+        </Button>
+      </ButtonGroup>
+    </div>
   );
 };
 
