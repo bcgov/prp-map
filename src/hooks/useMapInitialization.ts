@@ -22,14 +22,16 @@ export const useMapInitialization = (
     defaultZoom?: number;
     minZoom?: number;
     maxZoom?: number;
+    center?: [number, number];
+    extent?: [number, number, number, number];
   } = {},
 ) => {
   return useMemo(() => {
     const view = new OlView({
-      center: MAP_CENTER_COORDINATES,
+      center: zoomSettings.center ?? MAP_CENTER_COORDINATES,
       zoom: zoomSettings.defaultZoom ?? DEFAULT_MAP_ZOOM,
       enableRotation: false,
-      extent: MAP_EXTENT_COORDINATES,
+      extent: zoomSettings.extent ?? MAP_EXTENT_COORDINATES,
       minZoom: zoomSettings.minZoom ?? 6,
       maxZoom: zoomSettings.maxZoom ?? 20,
     });

@@ -33,6 +33,10 @@ interface VectorFeatureMapProps {
   minZoom?: number;
   /** Optional maximum zoom level for the map */
   maxZoom?: number;
+  /** Optional center coordinate for the map */
+  center?: [number, number];
+  /** Optional extent to fit the map to */
+  extent?: [number, number, number, number];
 }
 
 /**
@@ -50,6 +54,8 @@ const VectorFeatureMap = forwardRef<any, VectorFeatureMapProps>(
       defaultZoom = DEFAULT_MAP_ZOOM,
       minZoom = MAP_LAYER.MIN_ZOOM_LEVEL,
       maxZoom = MAP_LAYER.MAX_ZOOM_LEVEL,
+      center,
+      extent,
     },
     ref,
   ) => {
@@ -59,6 +65,8 @@ const VectorFeatureMap = forwardRef<any, VectorFeatureMapProps>(
       defaultZoom,
       minZoom,
       maxZoom,
+      center,
+      extent,
     });
 
     useImperativeHandle(ref, () => ({
