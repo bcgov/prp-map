@@ -1,7 +1,7 @@
 {
   "name": "@bcgov/prp-map",
   "description": "A React component for displaying a map",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "type": "module",
   "main": "dist/index.umd.js",
   "module": "dist/index.es.js",
@@ -25,7 +25,9 @@
   "scripts": {
     "dev": "vite --config example/vite.config.ts",
     "build": "vite build",
-    "lint": "eslint .",
+    "build:watch": "vite build --watch --mode development",
+    "lint": "eslint src --",
+    "lint:fix": "eslint src --fix",
     "preview": "vite preview",
     "test": "vitest --mode test",
     "test:cov": "vitest run --mode test --coverage",
