@@ -8,7 +8,7 @@ import {
 import { FC, memo, useCallback } from "react";
 import OlMap from "ol/Map";
 import { Coordinate } from "ol/coordinate";
-import { DEFAULT_MAP_ZOOM } from "@/constants";
+import { DEFAULT_MAP_ZOOM, MAP_EXTENT_COORDINATES } from "@/constants";
 import "@/components/MapControls/MapControls.css";
 
 interface MapControlsProps {
@@ -53,7 +53,7 @@ const MapControls: FC<MapControlsProps> = ({
   const onCenter = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation();
-      view.fit(extent ?? view.getProjection().getExtent());
+      view.fit(extent ?? MAP_EXTENT_COORDINATES);
       view.setZoom(defaultZoom);
     },
     [view, extent, defaultZoom],

@@ -32,7 +32,7 @@ export const useMapBaseLayers = () => {
         }),
       }),
     ],
-    []
+    [],
   );
 
   useEffect(() => {

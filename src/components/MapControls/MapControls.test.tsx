@@ -3,7 +3,7 @@ import { Coordinate } from "ol/coordinate";
 import { MapControls } from "@";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { DEFAULT_MAP_ZOOM } from "@/constants";
+import { DEFAULT_MAP_ZOOM, MAP_EXTENT_COORDINATES } from "@/constants";
 
 describe("MapControls", () => {
   const mockView = {
@@ -33,7 +33,7 @@ describe("MapControls", () => {
     render(<MapControls {...defaultProps} />);
 
     expect(
-      screen.getByLabelText("Center map to full extent"),
+      screen.getByLabelText("Center map to full extent")
     ).toBeInTheDocument();
     expect(screen.getByLabelText("Zoom in")).toBeInTheDocument();
     expect(screen.getByLabelText("Zoom out")).toBeInTheDocument();
@@ -77,7 +77,7 @@ describe("MapControls", () => {
 
     fireEvent.click(screen.getByLabelText("Center map to full extent"));
 
-    expect(mockView.fit).toHaveBeenCalledWith([0, 0, 100, 100]);
+    expect(mockView.fit).toHaveBeenCalledWith(MAP_EXTENT_COORDINATES);
     expect(mockView.setZoom).toHaveBeenCalledWith(DEFAULT_MAP_ZOOM);
   });
 
