@@ -1,3 +1,8 @@
+:root {
+  --blue: #003366;
+  --blue-light: #c7e3fd;
+}
+
 .zoom-control {
   position: absolute;
   bottom: 20px;
@@ -18,14 +23,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #1E5189;
-  border: 1px solid #1E5189;
+  color: var(--blue);
+  border: 1px solid var(--blue);
   border-radius: 6px;
   padding: 8px;
   height: 30px;
   box-shadow: 0 2px 4px rgba(0, 51, 102, 0.2);
   background-color: white;
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .zoom-btn.zoom-btn--first,
@@ -43,13 +51,13 @@
 }
 
 .zoom-btn--with-divider::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 6px;
   right: 6px;
   height: 1px;
-  background-color: #1E5189;
+  background-color: var(--blue);
   pointer-events: none;
   z-index: 2;
 }
@@ -59,15 +67,14 @@
 }
 
 .zoom-btn-group > .zoom-btn:last-child {
-  border-bottom: 1px solid #1E5189;
+  border-bottom: 1px solid var(--blue);
   border-bottom-left-radius: 6px;
   border-bottom-right-radius: 6px;
 }
 
 .zoom-btn.btn-light:hover,
 .zoom-btn.btn-light:active {
-  background-color: #c7e3fd;
-  border-color: #1E5189;
-  color: #1E5189;
+  background-color: var(--blue-light);
+  border-color: var(--blue);
+  color: var(--blue);
 }
-
