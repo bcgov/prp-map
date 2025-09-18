@@ -9,7 +9,7 @@ interface UseGetMapStylesResult {
   error: Error | null;
 }
 
-export const useGetMapStyles = (): UseGetMapStylesResult => {
+export const useGetMapStyles = (styleUrl?: string): UseGetMapStylesResult => {
   const [data, setData] = useState<MapStyles | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -17,7 +17,7 @@ export const useGetMapStyles = (): UseGetMapStylesResult => {
   useEffect(() => {
     const fetchMapStyles = async () => {
       try {
-        const response = await fetch(MAP_URLS.styles, {
+        const response = await fetch(styleUrl ?? MAP_URLS.styles, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
         });
