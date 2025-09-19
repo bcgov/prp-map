@@ -1,7 +1,7 @@
 {
   "name": "@bcgov/prp-map",
   "description": "A React component for displaying a map",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "type": "module",
   "main": "dist/index.umd.js",
   "module": "dist/index.es.js",
@@ -46,9 +46,9 @@
   "dependencies": {
     "@bcgov/bc-sans": "^2.1.0",
     "@digitalspace/bcparks-bootstrap-theme": "^1.4.6",
-    "@fortawesome/free-solid-svg-icons": "^6.7.2",
-    "@fortawesome/react-fontawesome": "^0.2.2",
-    "ol": "^10.5.0",
+    "@fortawesome/free-solid-svg-icons": "^7.0.1",
+    "@fortawesome/react-fontawesome": "^3.0.2",
+    "ol": "^10.6.1",
     "ol-mapbox-style": "^12.5.0",
     "react-bootstrap": "^2.10.10"
   },
