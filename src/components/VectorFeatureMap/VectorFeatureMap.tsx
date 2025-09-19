@@ -10,12 +10,13 @@ import {
 } from "react";
 import { Coordinate } from "ol/coordinate";
 import { useAddVectorLayersToMap } from "@/hooks/useAddVectorLayersToMap";
-import { useMapBaseLayers } from "@/hooks/useMapBaseLayers";
+import { useBaseLayers } from "@/hooks/useBaseLayers";
 import { useOpenLayersTracking } from "@/hooks/useOpenLayersTracking";
 import { useMapInitialization } from "@/hooks/useMapInitialization";
 import MapControls from "@/components/MapControls/MapControls";
+import BaseLayerControls from "@/components/BaseLayerControls/BaseLayerControls";
 import { DEFAULT_MAP_ZOOM, MAP_LAYER } from "@/constants";
-import { VectorLayerConfig } from "@/types";
+import { VectorLayerConfig, BaseLayerOption } from "@/types";
 import "@/components/VectorFeatureMap/VectorFeatureMap.css";
 
 interface VectorFeatureMapProps {
@@ -37,6 +38,10 @@ interface VectorFeatureMapProps {
   center?: [number, number];
   /** Optional extent to fit the map to */
   extent?: [number, number, number, number];
+  /** Optional custom base layers to use instead of default BC base layer */
+  baseLayers?: BaseLayerOption[];
+  /** Enables base layer controls when multiple base layers are provided */
+  enableBaseLayerControls?: boolean;
 }
 
 /**
@@ -56,12 +61,19 @@ const VectorFeatureMap = forwardRef<any, VectorFeatureMapProps>(
       maxZoom = MAP_LAYER.MAX_ZOOM_LEVEL,
       center,
       extent,
+      baseLayers,
+      enableBaseLayerControls = true,
     },
     ref,
   ) => {
     const [featureExtent, setFeatureExtent] = useState<Coordinate | null>(null);
-    const baseLayers = useMapBaseLayers();
-    const map = useMapInitialization(baseLayers, {
+    const [activeBaseId, setActiveBaseId] = useState<string>(
+      baseLayers?.[0]?.id || "default",
+    );
+
+    const mapBaseLayers = useBaseLayers(baseLayers);
+    const hasMultipleBaseLayers = (baseLayers?.length ?? 0) > 1;
+    const map = useMapInitialization(mapBaseLayers, {
       defaultZoom,
       minZoom,
       maxZoom,
@@ -75,6 +87,11 @@ const VectorFeatureMap = forwardRef<any, VectorFeatureMapProps>(
 
     // Track if map has already been fit to extent once
     const hasFittedRef = useRef(false);
+
+    // Handle base layer changes
+    const handleBaseMapChange = useCallback((id: string) => {
+      setActiveBaseId(id);
+    }, []);
 
     const handleCallback = useCallback(
       (extent: Coordinate) => {
@@ -98,6 +115,27 @@ const VectorFeatureMap = forwardRef<any, VectorFeatureMapProps>(
 
     useAddVectorLayersToMap({ map, layers: memoizedLayers });
 
+    // Manage base layer switching when custom base layers are provided
+    useEffect(() => {
+      if (!map || !baseLayers?.length) return;
+
+      const activeBaseLayer = baseLayers.find(
+        (bl) => bl.id === activeBaseId,
+      )?.layer;
+      if (!activeBaseLayer) return;
+
+      // Remove all base layers
+      const mapLayers = map.getLayers();
+      baseLayers.forEach((bl) => {
+        if (mapLayers.getArray().includes(bl.layer)) {
+          map.removeLayer(bl.layer);
+        }
+      });
+
+      // Add the active base layer
+      mapLayers.insertAt(0, activeBaseLayer);
+    }, [map, baseLayers, activeBaseId]);
+
     useEffect(() => {
       const targetElement = document.getElementById("map-container");
       if (targetElement) {
@@ -115,6 +153,13 @@ const VectorFeatureMap = forwardRef<any, VectorFeatureMapProps>(
         aria-label="styled-vector-feature-map"
       >
         {children}
+        {hasMultipleBaseLayers && enableBaseLayerControls && (
+          <BaseLayerControls
+            baseMaps={baseLayers || []}
+            activeBaseId={activeBaseId}
+            onChange={handleBaseMapChange}
+          />
+        )}
         <MapControls
           map={map}
           extent={featureExtent ?? undefined}

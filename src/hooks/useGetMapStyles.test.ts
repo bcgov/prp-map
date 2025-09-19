@@ -8,9 +8,10 @@ describe("useGetMapStyles", () => {
   });
 
   it("returns loading state initially", async () => {
+    // eslint-disable-next-line promise/avoid-new
     vi.stubGlobal("fetch", vi.fn(() => new Promise(() => {})) as any);
 
-    const { result } = renderHook(() => useGetMapStyles());
+    const { result } = renderHook(() => useGetMapStyles(MAP_URLS.styles));
     expect(result.current.isLoading).toBe(true);
     expect(result.current.data).toBe(null);
     expect(result.current.error).toBe(null);
@@ -29,7 +30,7 @@ describe("useGetMapStyles", () => {
       }) as any,
     );
 
-    const { result } = renderHook(() => useGetMapStyles());
+    const { result } = renderHook(() => useGetMapStyles(MAP_URLS.styles));
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
 
@@ -43,7 +44,7 @@ describe("useGetMapStyles", () => {
       vi.fn(() => Promise.resolve({ ok: false, status: 500 })) as any,
     );
 
-    const { result } = renderHook(() => useGetMapStyles());
+    const { result } = renderHook(() => useGetMapStyles(MAP_URLS.styles));
 
     await waitFor(() => expect(result.current.isLoading).toBe(false));
 

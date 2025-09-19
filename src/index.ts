@@ -1,7 +1,10 @@
 export * from "./hooks";
 export * from "./layers";
+export * from "./types";
 import "@/styles/variables.css";
 import "@/components/MapControls/MapControls.css";
 import "@/components/VectorFeatureMap/VectorFeatureMap.css";
+import "@/components/BaseLayerControls/BaseLayerControls.css";
 export { default as MapControls } from "@/components/MapControls/MapControls";
 export { default as VectorFeatureMap } from "@/components/VectorFeatureMap/VectorFeatureMap";
+export { default as BaseLayerControls } from "@/components/BaseLayerControls/BaseLayerControls";

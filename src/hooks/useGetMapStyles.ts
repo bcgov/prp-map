@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { MAP_URLS } from "@/constants";
 
 type MapStyles = unknown;
 
@@ -9,7 +8,7 @@ interface UseGetMapStylesResult {
   error: Error | null;
 }
 
-export const useGetMapStyles = (styleUrl?: string): UseGetMapStylesResult => {
+export const useGetMapStyles = (styleUrl: string): UseGetMapStylesResult => {
   const [data, setData] = useState<MapStyles | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -17,10 +16,7 @@ export const useGetMapStyles = (styleUrl?: string): UseGetMapStylesResult => {
   useEffect(() => {
     const fetchMapStyles = async () => {
       try {
-        const response = await fetch(styleUrl ?? MAP_URLS.styles, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-        });
+        const response = await fetch(styleUrl);
 
         if (!response.ok) {
           throw new Error(`Failed to fetch: ${response.status}`);
@@ -36,7 +32,7 @@ export const useGetMapStyles = (styleUrl?: string): UseGetMapStylesResult => {
     };
 
     fetchMapStyles();
-  }, []);
+  }, [styleUrl]);
 
   return { data, isLoading, error };
 };
