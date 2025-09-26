@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGlobe } from "@fortawesome/free-solid-svg-icons";
 import { BaseLayerOption } from "@/types";
+import { trackEvent } from "@/utils/matomo";
 import "./BaseLayerControls.css";
 
 interface BaseLayerControlsProps {
@@ -9,6 +10,7 @@ interface BaseLayerControlsProps {
   activeBaseId: string;
   onChange: (id: string) => void;
   style?: React.CSSProperties;
+  enableTracking?: boolean;
 }
 
 const BaseLayerControls: React.FC<BaseLayerControlsProps> = ({
@@ -16,6 +18,7 @@ const BaseLayerControls: React.FC<BaseLayerControlsProps> = ({
   activeBaseId,
   onChange,
   style,
+  enableTracking = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -62,12 +65,21 @@ const BaseLayerControls: React.FC<BaseLayerControlsProps> = ({
     (id: string) => {
       onChange(id);
 
+      if (enableTracking) {
+        const selectedBaseMap = baseMaps.find((b) => b.id === id);
+        trackEvent({
+          category: "Map",
+          action: "Base Layer Selection",
+          name: selectedBaseMap?.name ?? id,
+        });
+      }
+
       // Update URL search parameter
       const url = new URL(window.location.href);
       url.searchParams.set("base_layer", id);
       window.history.replaceState({}, "", url.toString());
     },
-    [onChange],
+    [onChange, enableTracking, baseMaps],
   );
 
   return (

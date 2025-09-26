@@ -158,6 +158,7 @@ const VectorFeatureMap = forwardRef<any, VectorFeatureMapProps>(
             baseMaps={baseLayers || []}
             activeBaseId={activeBaseId}
             onChange={handleBaseMapChange}
+            enableTracking={enableTracking}
           />
         )}
         <MapControls
