@@ -158,12 +158,14 @@ const VectorFeatureMap = forwardRef<any, VectorFeatureMapProps>(
             baseMaps={baseLayers || []}
             activeBaseId={activeBaseId}
             onChange={handleBaseMapChange}
+            enableTracking={enableTracking}
           />
         )}
         <MapControls
           map={map}
           extent={featureExtent ?? undefined}
           defaultZoom={defaultZoom}
+          enableTracking={enableTracking}
         />
       </div>
     );

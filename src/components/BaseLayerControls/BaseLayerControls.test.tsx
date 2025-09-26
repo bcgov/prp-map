@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import BaseLayerControls from "./BaseLayerControls";
 import { BaseLayerOption } from "@/types";
+import { trackEvent } from "@/utils/matomo";
 
 vi.mock("@fortawesome/react-fontawesome", () => ({
   FontAwesomeIcon: () => <span data-testid="fontawesome-icon">🌐</span>,
@@ -9,6 +10,10 @@ vi.mock("@fortawesome/react-fontawesome", () => ({
 
 vi.mock("@fortawesome/free-solid-svg-icons", () => ({
   faGlobe: "globe-icon",
+}));
+
+vi.mock("@/utils/matomo", () => ({
+  trackEvent: vi.fn(),
 }));
 
 describe("BaseLayerControls", () => {
@@ -245,5 +250,43 @@ describe("BaseLayerControls", () => {
     expect(
       screen.getByRole("button", { name: /toggle basemap options/i }),
     ).toBeInTheDocument();
+  });
+
+  it("tracks base layer selection when enableTracking is true", () => {
+    const onChange = vi.fn();
+    render(
+      <BaseLayerControls {...defaultProps} onChange={onChange} enableTracking={true} />
+    );
+
+    const toggleButton = screen.getByRole("button", {
+      name: /toggle basemap options/i,
+    });
+    fireEvent.click(toggleButton);
+
+    const option = screen.getByText("Test Base 2").closest("button");
+    fireEvent.click(option!);
+
+    expect(trackEvent).toHaveBeenCalledWith({
+      category: "Map",
+      action: "Base Layer Selection",
+      name: "Test Base 2",
+    });
+  });
+
+  it("does not track base layer selection when enableTracking is false", () => {
+    const onChange = vi.fn();
+    render(
+      <BaseLayerControls {...defaultProps} onChange={onChange} enableTracking={false} />
+    );
+
+    const toggleButton = screen.getByRole("button", {
+      name: /toggle basemap options/i,
+    });
+    fireEvent.click(toggleButton);
+
+    const option = screen.getByText("Test Base 2").closest("button");
+    fireEvent.click(option!);
+
+    expect(trackEvent).not.toHaveBeenCalled();
   });
 });
