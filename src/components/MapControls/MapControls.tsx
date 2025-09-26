@@ -9,12 +9,14 @@ import { FC, memo, useCallback } from "react";
 import OlMap from "ol/Map";
 import { Coordinate } from "ol/coordinate";
 import { DEFAULT_MAP_ZOOM, MAP_EXTENT_COORDINATES } from "@/constants";
+import { trackEvent } from "@/utils/matomo";
 import "@/components/MapControls/MapControls.css";
 
 interface MapControlsProps {
   map: OlMap;
   extent?: Coordinate;
   defaultZoom?: number;
+  enableTracking?: boolean;
 }
 
 /**
@@ -29,6 +31,7 @@ const MapControls: FC<MapControlsProps> = ({
   map,
   extent,
   defaultZoom = DEFAULT_MAP_ZOOM,
+  enableTracking = false,
 }) => {
   const view = map.getView();
 
@@ -37,8 +40,16 @@ const MapControls: FC<MapControlsProps> = ({
       e.stopPropagation();
       const zoom = view.getZoom() ?? 0;
       view.animate({ zoom: zoom + 1, duration: 250 });
+      
+      if (enableTracking) {
+        trackEvent({
+          category: "Map",
+          action: "Button Click",
+          name: "Zoom In",
+        });
+      }
     },
-    [view],
+    [view, enableTracking],
   );
 
   const onZoomOut = useCallback(
@@ -46,8 +57,16 @@ const MapControls: FC<MapControlsProps> = ({
       e.stopPropagation();
       const zoom = view.getZoom() ?? 0;
       view.animate({ zoom: zoom - 1, duration: 250 });
+      
+      if (enableTracking) {
+        trackEvent({
+          category: "Map",
+          action: "Button Click",
+          name: "Zoom Out",
+        });
+      }
     },
-    [view],
+    [view, enableTracking],
   );
 
   const onCenter = useCallback(
@@ -55,8 +74,16 @@ const MapControls: FC<MapControlsProps> = ({
       e.stopPropagation();
       view.fit(extent ?? MAP_EXTENT_COORDINATES);
       view.setZoom(defaultZoom);
+      
+      if (enableTracking) {
+        trackEvent({
+          category: "Map",
+          action: "Button Click",
+          name: "Center Map",
+        });
+      }
     },
-    [view, extent, defaultZoom],
+    [view, extent, defaultZoom, enableTracking],
   );
 
   return (

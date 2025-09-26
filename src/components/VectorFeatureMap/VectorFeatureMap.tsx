@@ -165,6 +165,7 @@ const VectorFeatureMap = forwardRef<any, VectorFeatureMapProps>(
           map={map}
           extent={featureExtent ?? undefined}
           defaultZoom={defaultZoom}
+          enableTracking={enableTracking}
         />
       </div>
     );

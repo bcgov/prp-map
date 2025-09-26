@@ -4,6 +4,11 @@ import { MapControls } from "@";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { DEFAULT_MAP_ZOOM, MAP_EXTENT_COORDINATES } from "@/constants";
+import { trackEvent } from "@/utils/matomo";
+
+vi.mock("@/utils/matomo", () => ({
+  trackEvent: vi.fn(),
+}));
 
 describe("MapControls", () => {
   const mockView = {
@@ -90,6 +95,68 @@ describe("MapControls", () => {
     expect(mockView.animate).toHaveBeenCalledWith({
       zoom: 1,
       duration: 250,
+    });
+  });
+
+  describe("tracking", () => {
+    it("tracks zoom in when enableTracking is true", () => {
+      mockView.getZoom.mockReturnValue(2);
+      render(<MapControls {...defaultProps} enableTracking={true} />);
+
+      fireEvent.click(screen.getByLabelText("Zoom in"));
+
+      expect(trackEvent).toHaveBeenCalledWith({
+        category: "Map",
+        action: "Button Click",
+        name: "Zoom In",
+      });
+    });
+
+    it("tracks zoom out when enableTracking is true", () => {
+      mockView.getZoom.mockReturnValue(2);
+      render(<MapControls {...defaultProps} enableTracking={true} />);
+
+      fireEvent.click(screen.getByLabelText("Zoom out"));
+
+      expect(trackEvent).toHaveBeenCalledWith({
+        category: "Map",
+        action: "Button Click",
+        name: "Zoom Out",
+      });
+    });
+
+    it("tracks center when enableTracking is true", () => {
+      render(<MapControls {...defaultProps} enableTracking={true} />);
+
+      fireEvent.click(screen.getByLabelText("Center map to full extent"));
+
+      expect(trackEvent).toHaveBeenCalledWith({
+        category: "Map",
+        action: "Button Click",
+        name: "Center Map",
+      });
+    });
+
+    it("does not track when enableTracking is false", () => {
+      mockView.getZoom.mockReturnValue(2);
+      render(<MapControls {...defaultProps} enableTracking={false} />);
+
+      fireEvent.click(screen.getByLabelText("Zoom in"));
+      fireEvent.click(screen.getByLabelText("Zoom out"));
+      fireEvent.click(screen.getByLabelText("Center map to full extent"));
+
+      expect(trackEvent).not.toHaveBeenCalled();
+    });
+
+    it("does not track when enableTracking is undefined", () => {
+      mockView.getZoom.mockReturnValue(2);
+      render(<MapControls {...defaultProps} />);
+
+      fireEvent.click(screen.getByLabelText("Zoom in"));
+      fireEvent.click(screen.getByLabelText("Zoom out"));
+      fireEvent.click(screen.getByLabelText("Center map to full extent"));
+
+      expect(trackEvent).not.toHaveBeenCalled();
     });
   });
 });
